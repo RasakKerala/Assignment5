@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clock & timer</title>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+
+
+<div class="tab">
+  <button class="tablinks" onclick="device(event, 'stpwtch')">STOP WATCH</button>
+  <button class="tablinks" onclick="device(event, 'dgclck')">DIGITAL CLOCK</button>
+
+</div>
+
+
+<div id="stpwtch" class="tabcontent">
+    <div class="stopwatch">
+        <h1 id="displayTime">00:00:00</h1>
+        <div class="buttons">
+            <button onclick="watchStop()">STOP</button>
+              <button onclick="watchStart()">START</button>
+            <button onclick="watchReset()">RESET</button>
+        </div>
+    </div>
+</div>
+
+<div id="dgclck" class="tabcontent">
+    
+        <div class="clock">
+            <span id="hrs">00</span>
+            <span>:</span>
+            <span id="min">00</span>
+            <span>:</span>
+            <span id="sec">00</span>
+        </div>
+    
+</div>
+
+
+<script>
+  function device(evt, deviceName) {
+  
+  let i, tabcontent, tablinks;
+
+
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+
+  
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+
+  document.getElementById(deviceName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+let hrs = document.getElementById("hrs");
+let min = document.getElementById("min");
+let sec = document.getElementById("sec");
+
+setInterval(()=>{
+    let currentTime = new Date();
+
+    hrs.innerHTML = (currentTime.getHours()<10?"0":"") + currentTime.getHours();
+    min.innerHTML = (currentTime.getMinutes()<10?"0":"") + currentTime.getMinutes();
+    sec.innerHTML = (currentTime.getSeconds()<10?"0":"") + currentTime.getSeconds();
+},1000)
+
+
+
+ let [seconds, minutes, hours] = [0,0,0];
+    let displayTime = document.getElementById("displayTime");
+    let timer = null;
+
+    function stopwatch(){
+        seconds++;
+        if(seconds == 60){
+            seconds = 0;
+            minutes++;
+            if(minutes == 60){
+                minutes = 0;
+                hours++;
+            }
+        }
+
+        let h = hours < 10 ? "0" + hours : hours;
+        let m = minutes < 10 ? "0" + minutes : minutes;
+        let s = seconds < 10 ? "0" + seconds : seconds;
+
+
+        displayTime.innerHTML = h +":"+ m +":"+ s;
+    }
+
+    function watchStart(){
+        if(timer!== null)
+        {
+            clearInterval(timer);
+        }
+        timer = setInterval(stopwatch,1000);
+    }
+
+    function watchStop(){
+        clearInterval(timer);
+    }
+    function watchReset(){
+        clearInterval(timer);
+        [seconds, minutes, hours] = [0,0,0];
+        displayTime.innerHTML = "00:00:00";
+    }
+</script>
+</body>
+</html>
